@@ -7,3 +7,4 @@ export const UserCreate = () => (
     TODO: new resource form
   </div>
 )
+export { default as Comments } from  './Comments'
