@@ -116,6 +116,7 @@ const Comments = () => {
 
 
   const actionBodyTemplate = (rowData) => {
+    /*creare bottone per modifica e visualizza dettagli */
     return (
         <div className="actions">
             {/* <Button icon="pi pi-pencil" className="p-button-rounded p-button-success p-mr-2" onClick={() => editProduct(rowData)} /> */}
