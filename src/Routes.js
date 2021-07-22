@@ -34,11 +34,9 @@ import { TypographyDemo } from './utilities/TypographyDemo';
 import { TimelineDemo } from './utilities/TimelineDemo';
 
 
-<<<<<<< HEAD
-import {Users, UsersLazy, UsersCrud, UserCreate} from 'corso';
-=======
-import {Users, UsersLazy, Comments} from 'corso';
->>>>>>> 2afa51e (Marco v.1.1)
+
+import {Users, UsersLazy, UsersCrud, UserCreate, CommentsCrud} from 'corso';
+
 
 const Routes = () => (
   <div className="layout-main">
@@ -75,7 +73,7 @@ const Routes = () => (
   <Route path="/users" component={Users} />
   <Route path="/users-lazy" component={UsersLazy} />
   <Route path="/users-crud" component={UsersCrud} />
-  <Route path="/comments" component={Comments} />
+  <Route path="/comments-crud" component={CommentsCrud} />
   </div>
 )
 
