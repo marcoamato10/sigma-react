@@ -34,7 +34,7 @@ import { TypographyDemo } from './utilities/TypographyDemo';
 import { TimelineDemo } from './utilities/TimelineDemo';
 
 
-import {Users, UsersLazy, UsersCrud} from 'corso';
+import {Users, UsersLazy, UsersCrud, UserCreate} from 'corso';
 
 const Routes = () => (
   <div className="layout-main">
