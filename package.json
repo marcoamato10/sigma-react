@@ -29,6 +29,7 @@
         "react-transition-group": "^4.4.1"
     },
     "scripts": {
+        "server": "json-server --watch db/db.json -p 3001",
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
@@ -42,5 +43,8 @@
         "not dead",
         "not ie <= 11",
         "not op_mini all"
-    ]
+    ],
+    "devDependencies": {
+        "json-server": "^0.16.3"
+    }
 }
