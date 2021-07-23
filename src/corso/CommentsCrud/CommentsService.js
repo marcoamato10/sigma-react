@@ -9,17 +9,24 @@ export class CommentsService {
     }))
   }
 
-  createComments(data) {
+  createComments(comment) {
     const url = 'http://localhost:3000/comments'
-    return axios.post(url, data).then(res => ({
+    return axios.post(url, comment).then(res => ({
       data: res.data
     }));
   }
 
-  deleteComm(data) {
+  deleteComm(comment) {
     const url = `http://localhost:3000/comments/`
-    return axios.delete(url + data.id).then(res => ({
+    return axios.delete(url + comment.id).then(res => ({
       data: res.data
     }));
+  }
+
+  updateComm(comment) {
+    const url = `http://localhost:3000/comments/`
+    return axios.put(`${url}/${comment.id}`, comment).then(res => ({
+      data: res.data
+    }))
   }
 }
