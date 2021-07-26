@@ -7,17 +7,22 @@ import { Dialog } from 'primereact/dialog';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
+import { InputTextarea } from 'primereact/inputtextarea';
+import { Dropdown } from 'primereact/dropdown';
 import { Toast } from 'primereact/toast';
 
 
 const Comments = () => {
   const emptyComment = {
+    postId: 0,
     id: null,
     name: '',
-    email: ''
+    email: '',
+    body: ''
   };
 
-  const { getComments, createComments, deleteComm, updateComm } = new CommentsService();
+
+  const { getComm, createComm, deleteComm, updateComm, getPosts } = new CommentsService();
   const [comments, setComments] = useState([])
   const [selectedComments, setSelectedComments] = useState(null)
   const [page, setPage] = useState({ first: 0, rows: 5, page: 0, pageCount: 0 });
@@ -33,17 +38,24 @@ const Comments = () => {
   const [deleteCommentDialog, setDeleteCommentDialog] = useState(false);
 
   const [editCommentDialog, setEditCommentDialog] = useState(false);
- 
+
+  const [dropdownValue, setDropdownValue] = useState(null);
+
+  const [posts, setPosts] = useState([]);
 
   //Aggiorna la lista
   const updateCommentsList = async () => {
-    const { data, totalRecords } = await getComments(page.page, page.rows)
+    const { data, totalRecords } = await getComm(page.page, page.rows)
     setComments(data);
     setTotalRecords(totalRecords)
   }
 
   useEffect(() => {
     updateCommentsList()
+    getPosts().then(data =>{
+    setPosts(data)
+    })
+    console.log(posts)
   }, [page]);
 
 
@@ -106,23 +118,24 @@ const Comments = () => {
   }
 
   //tasti del crea
-  const createCommentDialogFooter = (
+  const createCommentDialogFooter = (comment) => (
     <>
-      <Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
+      <Button label="Close" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
       <Button label="Save" icon="pi pi-check" className="p-button-text" onClick={saveComments} />
     </>
   );
 
   const saveComments = async () => {
+    comment.postId=dropdownValue.id;
     setSubmitted(true);
-    await createComments(comment)
+    await createComm(comment)
     updateCommentsList()
     setCreateCommentDialog(false);
     setComment(emptyComment);
   }
 
   //tasti del dettaglio
-  const detailCommentDialogFooter = (comment) => (
+  const detailCommentDialogFooter = (
     <>
       <Button label="Close" icon="pi pi-times" className="p-button-text" onClick={hideDetailDialog} />
     </>
@@ -157,7 +170,7 @@ const Comments = () => {
     // toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Comment Deleted', life: 3000 });
   }
 
-//Funzione per cambiare i valori nelle dialogs
+  //Funzione per cambiare i valori nelle dialogs
   const onInputChange = (e, name) => {
     const val = (e.target && e.target.value) || '';
     let _comment = { ...comment };
@@ -197,13 +210,15 @@ const Comments = () => {
           <Dialog
             visible={createCommentDialog}
             style={{ width: '450px' }}
-            header="Comment Details"
+            header="Comment Create"
             modal
             className="p-fluid"
             footer={createCommentDialogFooter}
             onHide={hideDialog}
           >
-            <div className="p-field">
+            <div >
+              <label>PostId</label>
+              <Dropdown value={dropdownValue} onChange={(e) => setDropdownValue(e.value)} options={posts} optionLabel="title" placeholder="Select a post" />
               <label htmlFor="name">Name</label>
               <InputText id="name" value={comment.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !comment.name })} />
               {submitted && !comment.name && <small className="p-invalid">Name is required.</small>}
@@ -211,6 +226,10 @@ const Comments = () => {
             <div className="p-field">
               <label htmlFor="email">Email</label>
               <InputText id="email" value={comment.email} onChange={(e) => onInputChange(e, 'email')} required rows={3} cols={20} />
+            </div>
+            <div className="p-field">
+              <label htmlFor="body">Body</label>
+              <InputTextarea id="body" value={comment.body} onChange={(e) => onInputChange(e, 'body')} required autoResize rows="3" cols="30" />
             </div>
           </Dialog>
 
@@ -221,16 +240,44 @@ const Comments = () => {
             header="Comment Details"
             modal
             className="p-fluid"
-            footer={detailCommentDialogFooter(comment)}
+            footer={detailCommentDialogFooter}
             onHide={hideDetailDialog}
           >
             <div className="p-field">
               <label htmlFor="postId">PostId</label>
-              <InputText id="postId" value={comment.postId} onChange={(e) => onInputChange(e, 'postId')} required rows={3} cols={20} />
+              <InputText id="postId" value={comment.postId} disabled rows={3} cols={20} />
             </div>
             <div className="p-field">
               <label htmlFor="id">Id</label>
-              <InputText id="id" value={comment.id} onChange={(e) => onInputChange(e, 'id')} required rows={3} cols={20} />
+              <InputText id="id" value={comment.id} disabled rows={3} cols={20} />
+            </div>
+            <div className="p-field">
+              <label htmlFor="name">Name</label>
+              <InputText id="name" value={comment.name} disabled />
+            </div>
+            <div className="p-field">
+              <label htmlFor="email">Email</label>
+              <InputText id="email" value={comment.email} disabled rows={3} cols={20} />
+            </div>
+            <div className="p-field">
+              <label htmlFor="body">Body</label>
+              <InputTextarea id="body" value={comment.body} disabled autoResize rows="3" cols="30" />
+            </div>
+          </Dialog>
+
+          {/* Dialog del Modifica */}
+          <Dialog
+            visible={editCommentDialog}
+            style={{ width: '450px' }}
+            header="Comment Edit"
+            modal
+            className="p-fluid"
+            footer={editCommentDialogFooter(comment)}
+            onHide={hideEditDialog}
+          >
+            <div className="p-field">
+            <label>PostId</label>
+              <Dropdown value={dropdownValue} onChange={(e) => setDropdownValue(e.value)} options={posts} optionLabel="title" placeholder="Select a post" />
             </div>
             <div className="p-field">
               <label htmlFor="name">Name</label>
@@ -243,28 +290,7 @@ const Comments = () => {
             </div>
             <div className="p-field">
               <label htmlFor="body">Body</label>
-              <InputText id="body" value={comment.body} onChange={(e) => onInputChange(e, 'body')} required rows={5} cols={50} />
-            </div>
-          </Dialog>
-
-          {/* Dialog del Modifica */}
-          <Dialog
-            visible={editCommentDialog}
-            style={{ width: '450px' }}
-            header="Comment Details"
-            modal
-            className="p-fluid"
-            footer={editCommentDialogFooter(comment)}
-            onHide={hideEditDialog}
-          >
-            <div className="p-field">
-              <label htmlFor="name">Name</label>
-              <InputText id="name" value={comment.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !comment.name })} />
-              {submitted && !comment.name && <small className="p-invalid">Name is required.</small>}
-            </div>
-            <div className="p-field">
-              <label htmlFor="email">Email</label>
-              <InputText id="email" value={comment.email} onChange={(e) => onInputChange(e, 'email')} required rows={3} cols={20} />
+              <InputTextarea id="body" value={comment.body} onChange={(e) => onInputChange(e, 'body')} required autoResize rows="3" cols="30" />
             </div>
           </Dialog>
 

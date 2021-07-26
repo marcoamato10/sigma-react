@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export class CommentsService {
-  getComments(page, limit) {
+  getComm(page, limit) {
     const url = `http://localhost:3000/comments?_page=${page + 1}&_limit=${limit}`
     return axios.get(url).then(res => ({
       data: res.data,
@@ -9,7 +9,7 @@ export class CommentsService {
     }))
   }
 
-  createComments(comment) {
+  createComm(comment) {
     const url = 'http://localhost:3000/comments'
     return axios.post(url, comment).then(res => ({
       data: res.data
@@ -28,5 +28,9 @@ export class CommentsService {
     return axios.put(`${url}/${comment.id}`, comment).then(res => ({
       data: res.data
     }))
+  }
+
+  getPosts() {
+    return axios.get('http://localhost:3000/posts').then(res => res.data);
   }
 }

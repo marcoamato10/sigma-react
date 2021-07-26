@@ -5,7 +5,7 @@ const menu = [
     items: [
       { label: 'Utenti', icon: 'pi pi-fw pi-user-edit', to: '/users' },
       { label: 'Utenti lazy', icon: 'pi pi-fw pi-user-edit', to: '/users-lazy' },
-      {label: 'CommentsCrud', icon: 'pi pi-fw pi-user-edit', to: '/comments-crud'},
+      {label: 'CommentsCrud', icon: 'pi pi-fw pi-user-edit', to: '/comments'},
       { label: 'Utenti crud', icon: 'pi pi-fw pi-user-edit', to: '/users-crud' },
       { label: 'Utenti create', icon: 'pi pi-fw pi-user-edit', to: '/users-create' },
     ]

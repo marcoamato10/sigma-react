@@ -7,7 +7,7 @@ export class UserService {
     // }
 
     getUsers() {
-      return axios.get('http://localhost:3001/users').then(res => res.data);
+      return axios.get('http://localhost:3000/users').then(res => res.data);
     }
 
     // getUsersWithOrdersSmall() {
