@@ -73,7 +73,8 @@ const Routes = () => (
   <Route path="/users" component={Users} />
   <Route path="/users-lazy" component={UsersLazy} />
   <Route path="/users-crud" component={UsersCrud} />
-  <Route path="/comments-crud" component={CommentsCrud} />
+  <Route path="/user-create" component={UserCreate} />
+  <Route path="/comments" component={CommentsCrud} />
   </div>
 )
 
