@@ -276,10 +276,6 @@ const Comments = () => {
             onHide={hideEditDialog}
           >
             <div className="p-field">
-            <label>PostId</label>
-              <Dropdown value={dropdownValue} onChange={(e) => setDropdownValue(e.value)} options={posts} optionLabel="title" placeholder="Select a post" />
-            </div>
-            <div className="p-field">
               <label htmlFor="name">Name</label>
               <InputText id="name" value={comment.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !comment.name })} />
               {submitted && !comment.name && <small className="p-invalid">Name is required.</small>}
